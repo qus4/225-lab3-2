@@ -35,7 +35,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to Dev Environment using NodePort') {
+        stage('Deploy to Dev Environment using ClusterIP + Ingress') {
             steps {
                 script {
                     // Set up Kubernetes configuration using the specified KUBECONFIG
@@ -43,6 +43,7 @@ pipeline {
                     // Update deployment-dev.yaml to use the new image tag
                     sh "sed -i 's|${DOCKER_IMAGE}:latest|${DOCKER_IMAGE}:${IMAGE_TAG}|' deployment.yaml"
                     sh "kubectl apply -f deployment.yaml"
+                    sh "kubectl apply -f ingress.yaml"
                 }
             }
         }
